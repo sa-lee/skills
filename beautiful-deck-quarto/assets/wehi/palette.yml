@@ -1,0 +1,55 @@
+# WEHI Brand Pack — Palette
+# Extracted from WEHI-PPT-Template-Resupply-2.pptx (theme1.xml + slide masters)
+# and verified against rendered slide screenshots.
+#
+# Roles follow Rhetoric of Decks: structural ink (titles, rules), emphasis
+# (max one per slide), block fills (backgrounds), categorical (chart series),
+# pastels (figure fills only).
+
+brand:
+  name: "WEHI"
+  font_main: "Georgia"           # serif — frame titles, assertions, body in some contexts
+  font_sans: "Arial"             # sans — body, captions, footers
+  font_mono: "Menlo"             # monospace — code blocks
+  fallback_main: "TeX Gyre Termes"   # used if Georgia not on system
+  fallback_sans: "TeX Gyre Heros"    # used if Arial not on system
+
+# Gradient (sampled from rendered slide template)
+# Body slides: NOT used by default in this skill (gradient repetition costs MB).
+# Title slide: full background, runs yellow (left) -> mint -> teal (right).
+# Section dividers: top band, runs teal (left) -> mint -> yellow (right).
+gradient:
+  teal:   "#B5ECE7"   # gradient endpoint, also the "teal mid" in theme XML
+  mint:   "#D6F2DB"   # gradient midpoint
+  yellow: "#F1F7D3"   # gradient endpoint
+
+# Structural / ink
+structural:
+  black:      "#000000"   # all default text
+  teal_dark:  "#1F7A72"   # callout block labels, hyperlinks, derived from #B4ECE7 family for WCAG AA on white (5.14:1)
+  teal_tint:  "#E1F7F5"   # callout block fills (theme dk2)
+  grey_70:    "#666666"   # captions, footer text
+  grey_50:    "#888888"   # spoken-attribution citations
+
+# Emphasis — used for the ONE number per slide that should land
+emphasis:
+  orange: "#FF6105"   # WEHI primary brand orange
+
+# Categorical chart palette — used only for chart series with multiple groups
+# WARNING: NOT colorblind-safe. For ancestry/group comparisons in genetics use
+# Okabe-Ito or Viridis instead.
+categorical:
+  - "#FF6105"   # orange
+  - "#ED5E82"   # pink
+  - "#9F71E5"   # purple
+  - "#578CFF"   # blue
+  - "#4EA749"   # green
+  - "#1F7A72"   # teal (added for 6-class needs)
+
+# Pastel fills — figure fills only, never as text or plot lines on white
+pastels:
+  peach:    "#FFCBAE"
+  pink:     "#F8BAC9"
+  lavender: "#DECDF9"
+  blue:     "#E8F0FF"
+  mint:     "#BCE1B9"

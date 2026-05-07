@@ -1,0 +1,139 @@
+% =============================================================
+% WEHI Beamer theme — preamble
+% Loaded by Quarto via include-in-header in the .qmd YAML.
+% Requires XeLaTeX (for system fonts Georgia / Arial).
+% =============================================================
+
+\usepackage{tikz}
+\usetikzlibrary{shadings, calc, fadings}
+\usepackage{xcolor}
+
+% --- Color definitions (mirrors palette.yml) ----------------
+\definecolor{wehiTeal}{HTML}{B5ECE7}      % gradient endpoint (left, body slide top band)
+\definecolor{wehiMint}{HTML}{D6F2DB}      % gradient midpoint
+\definecolor{wehiYellow}{HTML}{F1F7D3}    % gradient endpoint (right)
+
+\definecolor{wehiBlack}{HTML}{000000}
+\definecolor{wehiTealDark}{HTML}{1F7A72}  % WCAG-AA contrast on white
+\definecolor{wehiTealTint}{HTML}{E1F7F5}  % block fill
+\definecolor{wehiGrey70}{HTML}{666666}
+\definecolor{wehiGrey50}{HTML}{888888}
+
+\definecolor{wehiOrange}{HTML}{FF6105}    % EMPHASIS ONLY — max one per slide
+\definecolor{wehiPink}{HTML}{ED5E82}
+\definecolor{wehiPurple}{HTML}{9F71E5}
+\definecolor{wehiBlue}{HTML}{578CFF}
+\definecolor{wehiGreen}{HTML}{4EA749}
+
+% --- Define a 3-stop horizontal gradient as a TikZ shading ----
+% Used for title slide background and section divider top bands.
+\pgfdeclarehorizontalshading{wehiGradTMY}{100bp}{%
+  color(0bp)=(wehiTeal);
+  color(50bp)=(wehiMint);
+  color(100bp)=(wehiYellow)%
+}
+\pgfdeclarehorizontalshading{wehiGradYMT}{100bp}{%
+  color(0bp)=(wehiYellow);
+  color(50bp)=(wehiMint);
+  color(100bp)=(wehiTeal)%
+}
+
+% --- Frame titles: black serif, plain (per user pref to avoid gradient repetition)
+\setbeamercolor{frametitle}{fg=wehiBlack, bg=white}
+\setbeamerfont{frametitle}{family=\rmfamily, series=\bfseries, size=\Large}
+\setbeamertemplate{frametitle}{%
+  \vspace{0.3em}%
+  \insertframetitle\par%
+  \vspace{0.2em}%
+  {\color{wehiTealDark}\rule{\textwidth}{0.5pt}}%
+  \vspace{-0.5em}%
+}
+
+% --- Body text & structure
+\setbeamercolor{normal text}{fg=wehiBlack, bg=white}
+\setbeamercolor{structure}{fg=wehiTealDark}
+\setbeamercolor{itemize item}{fg=wehiTealDark}
+\setbeamercolor{itemize subitem}{fg=wehiTealDark}
+\setbeamercolor{itemize subsubitem}{fg=wehiTealDark}
+
+% --- Hyperlinks (only color real URLs and citations, not internal nav)
+\hypersetup{colorlinks=true, urlcolor=wehiOrange, linkcolor=wehiBlack, citecolor=wehiTealDark}
+
+% --- Callout block (the teal-tint key-result panel)
+\setbeamercolor{block title}{fg=wehiTealDark, bg=wehiTealTint}
+\setbeamercolor{block body}{fg=wehiBlack, bg=wehiTealTint}
+\setbeamerfont{block title}{family=\sffamily, series=\bfseries}
+
+% --- Footer line: section name | author | page (grey, not orange)
+\setbeamercolor{section in head/foot}{fg=wehiGrey70, bg=white}
+\setbeamercolor{date in head/foot}{fg=wehiGrey70, bg=white}
+\setbeamertemplate{footline}{%
+  % Suppress footer on title slide (frame number 1)
+  \ifnum\insertframenumber=1\else
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{section in head/foot}%
+      {\footnotesize\color{wehiGrey70}\hypersetup{linkcolor=wehiGrey70}\insertshorttitle}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em]{date in head/foot}%
+      \hfill{\footnotesize\color{wehiGrey70}\insertframenumber\,/\,\inserttotalframenumber}%
+    \end{beamercolorbox}%
+  }%
+  \fi
+}
+\setbeamertemplate{navigation symbols}{}
+
+% =============================================================
+% TITLE SLIDE — full-page gradient + white right panel for logo
+% Override via \maketitle. Footer suppressed via footline template above.
+% =============================================================
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    % Full-page gradient background (yellow left -> teal right)
+    \shade[shading=axis, shading angle=90, left color=wehiYellow, right color=wehiTeal]
+      (current page.south west) rectangle (current page.north east);
+    % White right panel (~25% of width) for logo
+    \fill[white] ([xshift=-0.25\paperwidth]current page.north east)
+      rectangle (current page.south east);
+    % Logo (if file exists; placeholder if not — user can drop logo.pdf into assets/wehi/)
+    \node[anchor=north east, inner sep=0pt]
+      at ([xshift=-1.2cm, yshift=-1.2cm]current page.north east)
+      {\IfFileExists{assets/wehi/logo.pdf}{\includegraphics[width=2.8cm]{assets/wehi/logo.pdf}}{}};
+    % Title block — left side, vertically centered
+    \node[anchor=north west, text width=0.65\paperwidth, inner sep=0pt]
+      at ([xshift=1.5cm, yshift=-3.5cm]current page.north west) {%
+        {\sffamily\small\color{wehiBlack}\insertdate\par}%
+        \vspace{1.2cm}%
+        {\rmfamily\bfseries\Huge\color{wehiBlack}\inserttitle\par}%
+        \vspace{0.8cm}%
+        {\sffamily\large\color{wehiBlack}\insertsubtitle\par}%
+      };
+    % Author at bottom-left
+    \node[anchor=south west]
+      at ([xshift=1.5cm, yshift=1.2cm]current page.south west)
+      {\sffamily\small\color{wehiBlack}\insertauthor};
+  \end{tikzpicture}
+}
+
+% =============================================================
+% SECTION DIVIDER — gradient top band + section title
+% Use: \section{Methods} between frames; Quarto emits \section
+% from level-1 headings. The Beamer 'section page' template fires.
+% =============================================================
+\AtBeginSection[]{%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture, overlay]
+      % Top band (~22% of paperheight): teal -> mint -> yellow
+      \shade[shading=axis, shading angle=0, left color=wehiTeal, right color=wehiYellow]
+        (current page.north west) rectangle ([yshift=-0.22\paperheight]current page.north east);
+      % Section number (small, top-left in band)
+      \node[anchor=north west]
+        at ([xshift=1.5cm, yshift=-0.5cm]current page.north west)
+        {\sffamily\small\color{wehiBlack}Section \insertsectionnumber};
+      % Section title (large, centered vertically below band)
+      \node[anchor=west, text width=0.85\paperwidth]
+        at ([xshift=1.5cm]current page.center)
+        {\rmfamily\bfseries\Huge\color{wehiBlack}\insertsectionhead};
+    \end{tikzpicture}
+  \end{frame}
+}
