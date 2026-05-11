@@ -1,8 +1,13 @@
 ---
 name: analysis-review
-description: Code-level pre-paper audit for a bioinformatics or statistical genetics analysis. Three parallel referee agents check sample construction, model specification, and output provenance against a research spec; the main session then co-writes a simulation-recovery test on one load-bearing transformation. Sibling to paper-review (which audits the manuscript). Use when the user says "audit my analysis", "referee my pipeline", "check my code before I write this up", or before invoking paper-review on a finished manuscript.
+description: Use when the user asks to audit, referee, or check a
+  bioinformatics or statistical genetics analysis pipeline before writing
+  it up — phrases like "audit my analysis", "referee my pipeline", "check
+  my code before I write this up", or before invoking paper-review on a
+  finished manuscript. Sibling to paper-review (which audits the manuscript
+  prose, not the code).
 argument-hint: "[path-to-spec | free-text question | empty for auto-discover]"
-allowed-tools: Read, Glob, Grep, Bash(ls:*), Bash(git status:*), Bash(git log:*), Bash(Rscript -e "renv::status()":*), Write, Agent
+allowed-tools: Read, Glob, Grep, Bash(ls:*), Bash(git status:*), Bash(git log:*), Bash(Rscript -e "renv::status()"), Bash(Rscript scripts/*:*), Bash(Rscript tests/*:*), Write, Agent
 ---
 
 # Analysis Review
@@ -10,6 +15,14 @@ allowed-tools: Read, Glob, Grep, Bash(ls:*), Bash(git status:*), Bash(git log:*)
 Code-level pre-paper audit. Sibling to `paper-review`. Two phases:
 parallel static audit (Phase 1) followed by interactive simulation-recovery
 (Phase 2).
+
+## Contents
+
+- [Phase 0: Discovery](#phase-0-discovery)
+- [Phase 1: Parallel static audit](#phase-1-parallel-static-audit)
+- [Phase 2: Interactive simulation-recovery](#phase-2-interactive-simulation-recovery)
+- [Phase 3: Hand-off](#phase-3-hand-off)
+- [Constraints](#constraints)
 
 ## Phase 0: Discovery
 

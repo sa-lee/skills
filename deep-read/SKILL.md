@@ -1,16 +1,15 @@
 ---
 name: deep-read
 description: >
-  Rigorous, detail-preserving reading and summarization of academic papers — especially in
-  bioinformatics, statistical genetics, and related fields. Combines a batched, image-based
-  reading mechanism (splits long PDFs into 4-page chunks, reads 3 at a time with pause-and-confirm)
-  with the FOCUS output format (exhaustive section-by-section numbered extraction with embedded
-  direct quotes, plus a concise overview). Trigger on "/deep-read", "deep read this paper",
-  "FOCUS summary", "summarize this paper carefully/thoroughly/exhaustively", or any request to
-  read or summarize an academic PDF where the user wants every key insight captured with specific
-  details (effect sizes, sample sizes, accessions, software versions) and direct quotes preserved.
-  Also trigger when reading a paper that is too long to ingest reliably in one shot. Inputs are
-  LOCAL PDF paths only — this skill does not search for or download papers from the web.
+  Use when the user asks to deeply read or summarize a local academic PDF — phrases like
+  "/deep-read", "deep read this paper", "FOCUS summary", or "summarize this paper
+  carefully/thoroughly/exhaustively". Triggers on requests where every key insight must
+  be captured with concrete specifics (effect sizes, sample sizes, accessions, software
+  versions) and direct quotes preserved. Especially relevant for bioinformatics,
+  statistical genetics, and related fields where the specifics are what make a paper
+  replicable. Also use when a paper is long enough (>15 pages) that one-shot reading
+  risks shallow comprehension or context overflow. Inputs are LOCAL PDF paths only —
+  this skill does not search for or download papers from the web.
 ---
 
 # deep-read
@@ -49,19 +48,18 @@ hallucinated output. Read 4-page splits, 3 at a time, with pauses. The only exce
 
 The user provides a **local PDF path**. If they didn't, ask. Do not search the web.
 
-Resolve paths:
+Resolve paths from the supplied PDF (shell variables used throughout the rest of this skill):
 
-```python
-import os
-pdf_path = os.path.abspath(user_supplied_path)
-folder   = os.path.dirname(pdf_path)
-basename = os.path.splitext(os.path.basename(pdf_path))[0]
+```bash
+PDF="$(realpath user_supplied_path)"
+FOLDER="$(dirname "$PDF")"
+BASE="$(basename "$PDF" .pdf)"
 
-build_dir = os.path.join(folder, os.path.basename(folder) + '_build')
-split_dir = os.path.join(build_dir, 'split_' + basename)
+BUILD="$FOLDER/$(basename "$FOLDER")_build"
+SPLIT="$BUILD/split_$BASE"
 
-focus_out = os.path.join(folder, basename + '_focus.md')   # final output, alongside PDF
-notes_out = os.path.join(split_dir, 'notes.md')            # working notes, in build dir
+FOCUS="$FOLDER/${BASE}_focus.md"   # final output, alongside the PDF
+NOTES="$SPLIT/notes.md"            # working notes, in build dir
 ```
 
 **Check for existing FOCUS output.** If `<basename>_focus.md` exists, ask:
@@ -86,63 +84,38 @@ already opted into reading supplementary material when they invoked this skill.
 
 ## Step 2 — Decide path: short / text-only / standard
 
-**Short PDF path.** Open the PDF and check page count:
+All three branches use bundled scripts under `scripts/`. They are PEP 723 single-file
+uv scripts — uv installs the dependency on first run, no manual `pip install` needed.
 
-```python
-import pypdf
-n_pages = len(pypdf.PdfReader(pdf_path).pages)
+**Short PDF path.** Get the page count:
+
+```bash
+N_PAGES=$(uv run scripts/page_count.py "$PDF")
 ```
 
-If `n_pages < 15`, skip splitting. Read the whole PDF in one Read call. Proceed to Step 4.
+If `N_PAGES < 15`, skip splitting. Read the whole PDF in one Read call. Proceed to Step 4.
 
 **Text-only fast path.** Use this if and only if the user explicitly says "text only", passes
 `--text-only`, or the paper is known to be a prose-only piece (commentary, perspective, theory
-paper with no important figures). Extract the entire PDF to markdown using `pypdfium2` and read
-the markdown:
+paper with no important figures). Extract the entire PDF to per-page markdown:
 
-```python
-import pypdfium2 as pdfium
-pdf = pdfium.PdfDocument(pdf_path)
-text_path = os.path.join(build_dir, basename + '_text.md')
-os.makedirs(build_dir, exist_ok=True)
-with open(text_path, 'w') as f:
-    for i, page in enumerate(pdf, start=1):
-        textpage = page.get_textpage()
-        f.write(f'\n\n## Page {i}\n\n')
-        f.write(textpage.get_text_range())
-        textpage.close()
-        page.close()
-pdf.close()
+```bash
+TEXT="$BUILD/${BASE}_text.md"
+uv run scripts/extract_text.py "$PDF" "$TEXT"
 ```
 
-Then Read `text_path` and proceed to Step 4. No batching, no pause-and-confirm — text is cheap
+Then Read `$TEXT` and proceed to Step 4. No batching, no pause-and-confirm — text is cheap
 in the context window. **Default is NOT text-only.** Image-based reading catches figures,
 Manhattan plots, forest plots, gels, structural diagrams, and complex tables that text
 extraction loses. Only switch to text-only when you are sure the visual content doesn't matter.
 
 **Standard path.** For PDFs ≥15 pages without `--text-only`, split into 4-page chunks:
 
-```python
-import pypdf, os
-
-def split_pdf(input_path, output_dir, pages_per_chunk=4):
-    os.makedirs(output_dir, exist_ok=True)
-    reader = pypdf.PdfReader(input_path)
-    n = len(reader.pages)
-    prefix = os.path.splitext(os.path.basename(input_path))[0]
-    for start in range(0, n, pages_per_chunk):
-        end = min(start + pages_per_chunk, n)
-        writer = pypdf.PdfWriter()
-        for i in range(start, end):
-            writer.add_page(reader.pages[i])
-        out_path = os.path.join(output_dir, f'{prefix}_pp{start+1}-{end}.pdf')
-        with open(out_path, 'wb') as f:
-            writer.write(f)
-    return -(-n // pages_per_chunk)
+```bash
+uv run scripts/split_pdf.py "$PDF" "$SPLIT"   # writes ${BASE}_pp<start>-<end>.pdf into $SPLIT
 ```
 
-If `pypdf` is missing: `pip install pypdf`. (Note: this is `pypdf`, the actively maintained
-successor to the deprecated `PyPDF2`.) For the text-only path: `pip install pypdfium2`.
+Override the chunk size with `--pages-per-chunk N` if needed (default 4).
 
 ## Step 3 — Read in batches of 3 splits with pause-and-confirm
 
@@ -340,8 +313,8 @@ with reads in the main conversation and pause-and-confirm.
 |------|--------|
 | **Resolve** | Get local PDF path; resolve build/split/output paths |
 | **Check** | Existing `_focus.md` → offer reuse. Existing splits → offer reuse. Detect supp PDFs. |
-| **Path** | <15 pages → read whole. text-only → pypdfium2 extract → read md. else → split |
-| **Split** | `pypdf` 4-page chunks → `<folder>_build/split_<basename>/` |
+| **Path** | `scripts/page_count.py` → <15 pages = read whole; text-only = `scripts/extract_text.py` then read md; else split |
+| **Split** | `scripts/split_pdf.py` → 4-page chunks under `<folder>_build/split_<basename>/` |
 | **Read** | 3 splits at a time, update `notes.md`, pause-and-confirm |
 | **Supp** | Read supplementary PDFs same way |
 | **Write** | FOCUS markdown to `<basename>_focus.md` (frontmatter + overview + sections + Stats + Reproducibility) |

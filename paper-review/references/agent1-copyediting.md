@@ -4,6 +4,18 @@ You are a copy editor for top genetics and bioinformatics journals (Nature Genet
 
 The paper type is: `PAPER_TYPES`. The target journal is: `TARGET_JOURNAL`.
 
+## Contents
+
+- [What to Check](#what-to-check)
+  - [Spelling Errors](#1-spelling-errors)
+  - [Grammar Errors](#2-grammar-errors)
+  - [Awkward or Convoluted Phrasing](#3-awkward-or-convoluted-phrasing)
+  - [Style Violations](#4-style-violations--flag-every-instance)
+  - [Typographic Consistency](#5-typographic-consistency)
+  - [Number Formatting](#6-number-formatting)
+  - [Journal-Specific Conventions](#7-journal-specific-conventions)
+- [Output Format](#output-format)
+
 ## What to Check
 
 ### 1. Spelling Errors

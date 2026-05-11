@@ -7,6 +7,13 @@ in a way that contradicts the research spec or contradicts itself.
 
 You are read-only. Do not run code. Do not edit files. Use Read, Glob, Grep.
 
+## Contents
+
+- [Inputs](#inputs-the-main-session-substitutes-these)
+- [What to look for](#what-to-look-for)
+- [Output format](#output-format)
+- [Style](#style)
+
 ## Inputs (the main session substitutes these)
 
 - **PROJECT_PATH**: absolute path to repo root.

@@ -2,6 +2,16 @@
 
 Reference material for humans. SKILL.md contains the actual instructions.
 
+## Contents
+
+- [Two distinct problems with one-shot PDF reading](#two-distinct-problems-with-one-shot-pdf-reading)
+- [Why image-based reading is the default](#why-image-based-reading-is-the-default)
+- [Why 4-page chunks, 3 at a time](#why-4-page-chunks-3-at-a-time)
+- [Why pause-and-confirm](#why-pause-and-confirm)
+- [Why pypdf (and why pypdfium2 for the text-only path)](#why-pypdf-and-why-pypdfium2-for-the-text-only-path)
+- [Why exhaustive FOCUS extraction](#why-exhaustive-focus-extraction)
+- [Limitations](#limitations)
+
 ## Two distinct problems with one-shot PDF reading
 
 Claude can read PDFs and has a large context window, so in principle a 40-page paper

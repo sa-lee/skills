@@ -5,7 +5,32 @@ You are reviewing whether the methods described in this paper are sufficiently d
 The paper type is: `PAPER_TYPES`. The target journal is: `TARGET_JOURNAL`.
 The rendering outcome was: `RENDER_OUTCOME`.
 
+## Contents
+
+- [What to Check](#what-to-check)
+  - [Input Type Branch](#0-input-type-branch)
+  - [Manuscript Rendering & Computational Reproducibility](#1-manuscript-rendering--computational-reproducibility)
+  - [Software & Version Documentation](#2-software--version-documentation)
+  - [Pipeline & Workflow Documentation](#3-pipeline--workflow-documentation)
+  - [Data Access & Availability](#4-data-access--availability)
+  - [Statistical Methods Documentation](#5-statistical-methods-documentation)
+  - [Code Availability](#6-code-availability)
+  - [Figures and Tables Reproducibility](#7-figures-and-tables-reproducibility)
+- [Output Format](#output-format)
+
 ## What to Check
+
+### 0. Input Type Branch
+
+If `INPUT_TYPE` is `pdf`, you cannot inspect source files, environment
+specs, or pipeline code. Restrict assessment to what's documented in the
+manuscript itself — methods, data availability, code availability,
+supplement. Flag opacity rather than fabricating findings about files
+you cannot see. Skip sub-checks 1, 6, 7 and any others that require
+source inspection. Note in your output that source-level checks were
+not possible.
+
+If `INPUT_TYPE` is `source`, proceed with all checks below.
 
 ### 1. Manuscript Rendering & Computational Reproducibility
 

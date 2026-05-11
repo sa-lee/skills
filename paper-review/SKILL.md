@@ -1,11 +1,27 @@
 ---
 name: paper-review
-description: Run a 6-agent pre-submission referee report for a bioinformatics, statistical genetics, or genetic epidemiology manuscript. Use this skill whenever the user asks to review a paper, get feedback on a manuscript, run a pre-submission check, simulate peer review, or wants a structured critique of their academic writing. Triggers on phrases like "review my paper", "pre-submission check", "referee report", "manuscript review", "check my paper before submission", or references to reviewing .qmd/.tex files targeting genetics or bioinformatics journals. Also use when the user mentions journal names like Nature Genetics, AJHG, Genome Biology, or similar.
+description: Use when the user asks for a peer-review-style critique of a
+  bioinformatics, statistical genetics, or genetic epidemiology paper —
+  either their own pre-submission manuscript or someone else's paper they
+  are refereeing or reading critically. Trigger phrases include "review
+  my paper", "pre-submission check", "referee report", "referee this
+  paper", "manuscript review", "review for journal club", or "check this
+  paper". Accepts .qmd / .tex source or a .pdf. Sibling to analysis-review
+  (audits the analysis code, not the prose) and academic-writing-style
+  (line-level suggestions on smaller passages, not full-manuscript referee).
+argument-hint: "[journal-name] [path-to-manuscript | empty for auto-discover]"
+allowed-tools: Read, Glob, Grep, Bash(ls:*), Bash(quarto render:*), Write, Agent
 ---
 
 # Pre-Submission Paper Review for Bioinformatics & Statistical Genetics
 
 Run a rigorous 6-agent parallel review of an academic manuscript, simulating peer review at top genetics and bioinformatics journals.
+
+## Contents
+
+- [Phase 1: Parse, discover, render](#phase-1-parse-arguments-discover-the-paper-and-render)
+- [Phase 2: Launch 6 agents](#phase-2-launch-6-review-agents-in-parallel)
+- [Phase 3: Consolidate and save](#phase-3-consolidate-and-save)
 
 ## Phase 1: Parse Arguments, Discover the Paper, and Render
 
@@ -24,6 +40,12 @@ Parsing rules:
 - If `$ARGUMENTS` is empty, auto-detect both (no file path, `top-field`).
 
 ### 1.2 Discover the Manuscript
+
+**PDF input.** If `$ARGUMENTS` (or auto-discovery) resolves to a `.pdf`,
+set `INPUT_TYPE = pdf` and `MANUSCRIPT_INPUT = <path>`. Skip the
+multi-file manifest below — the PDF is the manuscript; figures/tables
+are embedded and will be referred to by number. For Quarto/LaTeX
+sources, set `INPUT_TYPE = source` and proceed with the manifest steps.
 
 Search for the manuscript in this order:
 
@@ -63,6 +85,9 @@ A paper may be multiple types (e.g., GWAS + survival). Store as `PAPER_TYPES` li
 
 ### 1.4 Attempt Rendering
 
+If `INPUT_TYPE == pdf`, skip rendering. Set
+`RENDER_OUTCOME = "n/a (PDF input — no source to render)"` and proceed.
+
 Try to render the manuscript:
 
 ```bash
@@ -98,7 +123,7 @@ For agent-specific instructions, read the corresponding reference file before co
 | Agent 5 — Figures, Tables & Code | `references/agent5-figures.md` | Genomics figure conventions, code chunk review, documentation |
 | Agent 6 — Contribution & Referee | `references/agent6-contribution.md` | Novelty, replication, biological plausibility, journal fit |
 
-Read each reference file and use its contents as the agent prompt, substituting `TARGET_JOURNAL`, `PAPER_TYPES`, file lists, and rendering outcome where indicated.
+Read each reference file and use its contents as the agent prompt, substituting `TARGET_JOURNAL`, `PAPER_TYPES`, `INPUT_TYPE`, file lists, and rendering outcome where indicated.
 
 ## Phase 3: Consolidate and Save
 

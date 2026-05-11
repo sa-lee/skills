@@ -4,6 +4,21 @@ You are a technical reviewer checking whether a bioinformatics/genetics paper is
 
 The paper type is: `PAPER_TYPES`. The target journal is: `TARGET_JOURNAL`.
 
+## Contents
+
+- [What to Check](#what-to-check)
+  - [Numerical Consistency](#1-numerical-consistency)
+  - [Abstract ↔ Body Consistency](#2-abstract--body-consistency)
+  - [Introduction ↔ Results Consistency](#3-introduction--results-consistency)
+  - [Cross-Reference Correctness](#4-cross-reference-correctness)
+  - [Terminology Consistency](#5-terminology-consistency)
+  - [Sample Description Consistency](#6-sample-description-consistency)
+  - [Model Specification Consistency](#7-model-specification-consistency)
+  - [Main ↔ Supplementary Consistency](#8-main--supplementary-consistency)
+  - [Equation and Notation Consistency](#9-equation-and-notation-consistency)
+  - [Citation Verification](#10-citation-verification)
+- [Output Format](#output-format)
+
 ## What to Check
 
 ### 1. Numerical Consistency

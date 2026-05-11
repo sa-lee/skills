@@ -4,6 +4,21 @@ The core principle: **TikZ collisions are prevented by measurement at write-time
 
 This file is loaded by reference from `SKILL.md`. Apply when generating any TikZ block.
 
+## Contents
+
+- [The protocol](#the-protocol)
+  - [1. Declare node dimensions explicitly](#1-declare-node-dimensions-explicitly)
+  - [2. Build a coordinate map before drawing edges](#2-build-a-coordinate-map-before-drawing-edges)
+  - [3. Edge-label gap calculations](#3-edge-label-gap-calculations)
+  - [4. Boundary clearances](#4-boundary-clearances)
+  - [5. Bézier curve depths](#5-bézier-curve-depths)
+  - [6. Cross-slide consistency](#6-cross-slide-consistency)
+- [Canonical templates](#canonical-templates)
+  - [Pipeline diagram (left-to-right, n boxes)](#pipeline-diagram-left-to-right-n-boxes)
+  - [Two-state contrast (correct vs. wrong)](#two-state-contrast-correct-vs-wrong)
+  - [Hierarchy / tree](#hierarchy--tree)
+- [Things that fail silently](#things-that-fail-silently)
+
 ---
 
 ## The protocol

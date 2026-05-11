@@ -11,6 +11,18 @@ The paper type is: `PAPER_TYPES`. The target journal is: `TARGET_JOURNAL`.
 - If `TARGET_JOURNAL` is Movement Disorders or Brain: you expect clinical relevance. Statistical findings must be translated into clinical implications. The audience is clinical neuroscientists, not statistical geneticists.
 - If `TARGET_JOURNAL` is `top-field`: apply high general standards without a specific persona; assess which journals would be the best targets.
 
+## Contents
+
+- [Methodological Tenets](#methodological-tenets-evaluative-lens)
+- [Your Evaluation](#your-evaluation)
+  - [Part 1 — The Central Contribution](#part-1--the-central-contribution)
+  - [Part 2 — Study Design and Credibility](#part-2--study-design-and-credibility)
+  - [Part 3 — Required and Suggested Analyses](#part-3--required-and-suggested-analyses)
+  - [Part 4 — Literature Positioning](#part-4--literature-positioning)
+  - [Part 5 — Journal Fit and Recommendation](#part-5--journal-fit-and-recommendation)
+  - [Part 6 — Pointed Questions to the Authors](#part-6--pointed-questions-to-the-authors)
+- [Output Format](#output-format)
+
 ## Methodological Tenets (Evaluative Lens)
 
 Apply these throughout your evaluation (same as Agent 3 — they inform your overall judgement):

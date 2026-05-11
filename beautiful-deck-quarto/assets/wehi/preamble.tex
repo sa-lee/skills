@@ -56,6 +56,12 @@
 \setbeamercolor{itemize subitem}{fg=wehiTealDark}
 \setbeamercolor{itemize subsubitem}{fg=wehiTealDark}
 
+% --- Itemize markers: dots, not Beamer's default triangles.
+% \textbullet is smaller and reads as a standard dot at body-text size.
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{$\circ$}
+\setbeamertemplate{itemize subsubitem}{$\ast$}
+
 % --- Hyperlinks (only color real URLs and citations, not internal nav)
 \hypersetup{colorlinks=true, urlcolor=wehiOrange, linkcolor=wehiBlack, citecolor=wehiTealDark}
 
@@ -68,14 +74,12 @@
 \setbeamercolor{section in head/foot}{fg=wehiGrey70, bg=white}
 \setbeamercolor{date in head/foot}{fg=wehiGrey70, bg=white}
 \setbeamertemplate{footline}{%
-  % Suppress footer on title slide (frame number 1)
+  % Suppress footer on title slide (frame number 1); page number only otherwise.
+  % Talk title is already on the title slide, no need to repeat in the footer.
   \ifnum\insertframenumber=1\else
   \leavevmode%
   \hbox{%
-    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{section in head/foot}%
-      {\footnotesize\color{wehiGrey70}\hypersetup{linkcolor=wehiGrey70}\insertshorttitle}%
-    \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em]{date in head/foot}%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em]{date in head/foot}%
       \hfill{\footnotesize\color{wehiGrey70}\insertframenumber\,/\,\inserttotalframenumber}%
     \end{beamercolorbox}%
   }%
@@ -84,34 +88,39 @@
 \setbeamertemplate{navigation symbols}{}
 
 % =============================================================
-% TITLE SLIDE — full-page gradient + white right panel for logo
-% Override via \maketitle. Footer suppressed via footline template above.
+% TITLE SLIDE — full-bleed gradient. The "white logo panel" is
+% omitted: this deck has no logo asset, and a clean full-bleed
+% gradient is more honest than a blank white panel.
+%
+% Implemented via background canvas (drawn behind everything,
+% full-page regardless of frame layout) plus a title page
+% template that owns text only.
 % =============================================================
+
+% Background: gradient fills page only on title slide (frame 1).
+\setbeamertemplate{background canvas}{%
+  \ifnum\thepage=1\relax
+    \begin{tikzpicture}[overlay, remember picture]
+      \shade[shading=axis, shading angle=90,
+             left color=wehiYellow, right color=wehiTeal]
+        (current page.south west) rectangle (current page.north east);
+    \end{tikzpicture}%
+  \fi
+}
+
+% Foreground: title block (text only, no background draw).
+% Single TikZ node anchored at page-north-west keeps title, subtitle,
+% author, date together so vertical layout cannot collide with itself.
 \setbeamertemplate{title page}{%
   \begin{tikzpicture}[remember picture, overlay]
-    % Full-page gradient background (yellow left -> teal right)
-    \shade[shading=axis, shading angle=90, left color=wehiYellow, right color=wehiTeal]
-      (current page.south west) rectangle (current page.north east);
-    % White right panel (~25% of width) for logo
-    \fill[white] ([xshift=-0.25\paperwidth]current page.north east)
-      rectangle (current page.south east);
-    % Logo (if file exists; placeholder if not — user can drop logo.pdf into assets/wehi/)
-    \node[anchor=north east, inner sep=0pt]
-      at ([xshift=-1.2cm, yshift=-1.2cm]current page.north east)
-      {\IfFileExists{assets/wehi/logo.pdf}{\includegraphics[width=2.8cm]{assets/wehi/logo.pdf}}{}};
-    % Title block — left side, vertically centered
-    \node[anchor=north west, text width=0.65\paperwidth, inner sep=0pt]
-      at ([xshift=1.5cm, yshift=-3.5cm]current page.north west) {%
-        {\sffamily\small\color{wehiBlack}\insertdate\par}%
-        \vspace{1.2cm}%
+    \node[anchor=north west, text width=0.85\paperwidth, inner sep=0pt]
+      at ([xshift=1.5cm, yshift=-2.0cm]current page.north west) {%
         {\rmfamily\bfseries\Huge\color{wehiBlack}\inserttitle\par}%
-        \vspace{0.8cm}%
+        \vspace{0.5cm}%
         {\sffamily\large\color{wehiBlack}\insertsubtitle\par}%
+        \vspace{1.4cm}%
+        {\sffamily\small\color{wehiBlack}\insertauthor\\[0.2em]\insertdate\par}%
       };
-    % Author at bottom-left
-    \node[anchor=south west]
-      at ([xshift=1.5cm, yshift=1.2cm]current page.south west)
-      {\sffamily\small\color{wehiBlack}\insertauthor};
   \end{tikzpicture}
 }
 
@@ -130,9 +139,11 @@
       \node[anchor=north west]
         at ([xshift=1.5cm, yshift=-0.5cm]current page.north west)
         {\sffamily\small\color{wehiBlack}Section \insertsectionnumber};
-      % Section title (large, centered vertically below band)
+      % Section title (large, vertically centered, left-anchored at page edge + margin).
+      % Anchor at current page.west (not .center) so the 0.85\paperwidth text box
+      % fits on-slide; anchoring at .center+1.5cm makes long titles overflow off-page.
       \node[anchor=west, text width=0.85\paperwidth]
-        at ([xshift=1.5cm]current page.center)
+        at ([xshift=1.5cm]current page.west)
         {\rmfamily\bfseries\Huge\color{wehiBlack}\insertsectionhead};
     \end{tikzpicture}
   \end{frame}

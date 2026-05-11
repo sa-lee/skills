@@ -10,6 +10,15 @@ The main session writes the audit report to:
 `<topic>` is sanitised from the spec source: lowercase, alphanumerics
 and hyphens only. If unclear, use `audit`.
 
+## Contents
+
+- [Schema](#schema)
+- [Overall Assessment](#overall-assessment)
+- [Phase 1 — Static Audit](#phase-1--static-audit)
+- [Phase 2 — Simulation-Recovery](#phase-2--simulation-recovery)
+- [Open items](#open-items)
+- [Hand-off](#hand-off)
+
 ## Schema
 
 ```markdown

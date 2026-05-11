@@ -2,6 +2,20 @@
 
 Quarto sits between markdown and LaTeX. Most slide content can be written as plain markdown headers and lists, but some Beamer features require raw LaTeX or fenced divs. This file documents the idioms.
 
+## Contents
+
+- [Slide structure](#slide-structure)
+- [Sections](#sections)
+- [Two-column layouts](#two-column-layouts)
+- [Callout blocks (the teal-tint key result panel)](#callout-blocks-the-teal-tint-key-result-panel)
+- [Emphasis (orange — max one per slide)](#emphasis-orange--max-one-per-slide)
+- [Math](#math)
+- [TikZ blocks](#tikz-blocks)
+- [Code-generated figures](#code-generated-figures)
+- [Speaker notes](#speaker-notes)
+- [Citations](#citations)
+- [What NOT to do](#what-not-to-do)
+
 ---
 
 ## Slide structure

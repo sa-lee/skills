@@ -12,6 +12,13 @@ You may execute these and only these read-only commands:
 
 Otherwise read-only (Read, Glob, Grep, Bash(ls:*)).
 
+## Contents
+
+- [Inputs](#inputs)
+- [What to look for](#what-to-look-for)
+- [Output format](#output-format)
+- [Style](#style)
+
 ## Inputs
 
 - **PROJECT_PATH**, **SPEC_SOURCE**, **REPO_FLAVOUR**, **CODE_MANIFEST**,

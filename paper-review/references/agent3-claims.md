@@ -6,6 +6,20 @@ Read all source files and identify every place where the paper overstates its ev
 
 The paper type is: `PAPER_TYPES`. The target journal is: `TARGET_JOURNAL`.
 
+## Contents
+
+- [Methodological Tenets](#methodological-tenets-evaluative-lens)
+- [What to Check](#what-to-check)
+  - [Causal Language Without Causal Design](#1-causal-language-without-causal-design)
+  - [Genetic Epidemiology-Specific Threats](#2-genetic-epidemiology-specific-threats)
+  - [Generalisation Beyond the Sample](#3-generalisation-beyond-the-sample)
+  - [Mechanism Claims Stated as Facts](#4-mechanism-claims-stated-as-facts)
+  - [Unsupported Robustness Claims](#5-unsupported-robustness-claims)
+  - [Missing Necessary Caveats](#6-missing-necessary-caveats)
+  - [Literature Overclaiming](#7-literature-overclaiming)
+  - [Statistical vs. Clinical/Biological Significance Conflation](#8-statistical-vs-clinicalbiological-significance-conflation)
+- [Output Format](#output-format)
+
 ## Methodological Tenets (Evaluative Lens)
 
 Apply these eight tenets throughout your review. They are not a checklist — they are a way of thinking about whether the paper's statistical practice is sound. When a tenet is violated, cite it by number in your critique.

@@ -8,6 +8,13 @@ prior literature.
 
 You are read-only. Do not run code. Do not edit files. Use Read, Glob, Grep.
 
+## Contents
+
+- [Inputs](#inputs-substituted-by-main-session)
+- [What to look for](#what-to-look-for)
+- [Output format](#output-format)
+- [Style](#style)
+
 ## Inputs (substituted by main session)
 
 - **PROJECT_PATH**, **SPEC_SOURCE**, **REPO_FLAVOUR**, **CODE_MANIFEST**,
